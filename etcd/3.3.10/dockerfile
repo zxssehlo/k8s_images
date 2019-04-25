@@ -1,2 +1,2 @@
-From k8s.gcr.io/etcd:3.3.10
-MAINTAINER zxs <zxs@netease.com>
+FROM k8s.gcr.io/etcd:3.3.10
+LABEL zxs <zxs@netease.com>

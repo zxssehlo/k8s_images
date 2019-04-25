@@ -1,2 +1,2 @@
-From k8s.gcr.io/pause:3.1
-MAINTAINER zxs <zxs@netease.com>
+FROM k8s.gcr.io/pause:3.1
+LABEL zxs <zxs@netease.com>
