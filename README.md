@@ -115,5 +115,38 @@ ansible all -m service -a "name=kubelet state=started" -b
 
 ## 获取Kubenetes镜像
 
-使用阿里云镜像服务
+查看kubeadm需要的镜像，在任意节点上执行：
+
+```bash
+kubeadm config images list
+```
+
+从阿里云拉取配置好的镜像，tag改为符合kubeadm需求的内容。
+
+```bash
+ansible all -a "docker pull registry.cn-beijing.aliyuncs.com/coronadata/kube-controller-manager/1.14.1" -b &
+ansible all -a "docker pull registry.cn-beijing.aliyuncs.com/coronadata/coredns:1.3.1" -b &
+ansible all -a "docker pull registry.cn-beijing.aliyuncs.com/coronadata/etcd:3.3.10" -b &
+ansible all -a "docker pull registry.cn-beijing.aliyuncs.com/coronadata/kube-apiserver:v1.14.1" -b &
+ansible all -a "docker pull registry.cn-beijing.aliyuncs.com/coronadata/kube-proxy:v1.14.1" -b &
+ansible all -a "docker pull registry.cn-beijing.aliyuncs.com/coronadata/kube-scheduler:v1.14.1" -b &
+ansible all -a "docker pull registry.cn-beijing.aliyuncs.com/coronadata/pause:3.1" -b &
+registry.cn-beijing.aliyuncs.com/coronadata/pause:3.1 k8s.gcr.io/pause:3.1" -b
+ansible all -a "docker image tag registry.cn-beijing.aliyuncs.com/coronadata/kube-apiserver:1.14.1 k8s.gcr.io/kube-apiserver:v1.14.1" -b
+ansible all -a "docker image tag registry.cn-beijing.aliyuncs.com/coronadata/kube-scheduler:1.14.1 k8s.gcr.io/kube-scheduler:v1.14.1" -b
+ansible all -a "docker image tag registry.cn-beijing.aliyuncs.com/coronadata/kube-proxy:1.14.1 k8s.gcr.io/kube-proxy:v1.14.1" -b
+ansible all -a "docker image tag registry.cn-beijing.aliyuncs.com/coronadata/kube-controller-manager:1.14.1 k8s.gcr.io/kube-controller-manager:v1.14.1" -b &
+ansible all -a "registry.cn-beijing.aliyuncs.com/coronadata/etcd:3.3.10 k8s.gcr.io/etcd:3.3.10" -b &
+ansible all -a "docker image tag registry.cn-beijing.aliyuncs.com/coronadata/etcd:3.3.10 k8s.gcr.io/etcd:3.3.10" -b &
+ansible all -a "docker image tag registry.cn-beijing.aliyuncs.com/coronadata/coredns:1.3.1 k8s.gcr.io/coredns:1.3.1" -b &
+```
+
+删除多余的镜像:
+
+```bash
+ansible all -m shell -a "docker images | grep registry | awk -F' ' '{ print \$3' } '" -b
+```
+
+## 初始化Kubenetes
+
 to be continue...
